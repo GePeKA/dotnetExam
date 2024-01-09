@@ -42,17 +42,8 @@ namespace GameLogic.Sevices
             var playerAttacks = new List<Attack>();
             var monsterAttacks = new List<Attack>();
 
-            for (int i = 0; i < player.AttackPerRound; i++)
+            for (int i = 0; i < player.AttackPerRound && monster.HitPoints != 0; i++)
             {
-                if (monster.HitPoints == 0)
-                {
-                    round.PlayerAttacks = playerAttacks.ToArray();
-                    round.MonsterAttacks = monsterAttacks.ToArray();
-                    Log.IsPlayerWinner = true;
-                    Rounds.Add(round);
-                    return;
-                }
-
                 var attack = ProcessAttack(player, monster, round);
                 playerAttacks.Add(attack);
             }

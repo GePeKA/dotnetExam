@@ -55,7 +55,8 @@
             }
             else
             {
-                <p>@attack.DiceRollOnAttack (+@Model.Player.AttackModifier) больше @Model.Monster.ArmorClass, @attack.TotalDamage (+@Model.Player.DamageModifier)
+                <p>
+                    @attack.DiceRollOnAttack (+@Model.Player.AttackModifier) больше @Model.Monster.ArmorClass, @attack.TotalDamage (+@Model.Player.DamageModifier)
                     наносит @(attack.TotalDamage+Model.Player.DamageModifier) урона @Model.Monster.Name (@attack.EnemyHitPoints)
                 </p>
             }
@@ -74,7 +75,8 @@
             }
             else
             {
-                <p>@attack.DiceRollOnAttack (+@Model.Monster.AttackModifier) больше @Model.Player.ArmorClass, @attack.TotalDamage (+@Model.Monster.DamageModifier)
+                <p>
+                    @attack.DiceRollOnAttack (+@Model.Monster.AttackModifier) больше @Model.Player.ArmorClass, @attack.TotalDamage (+@Model.Monster.DamageModifier)
                     наносит @(attack.TotalDamage+Model.Monster.DamageModifier) урона @Model.Player.Name (@attack.EnemyHitPoints)
                 </p>
             }
