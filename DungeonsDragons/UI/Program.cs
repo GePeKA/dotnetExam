@@ -1,16 +1,7 @@
-using GameLogic.DbModels;
-using GameLogic.Sevices;
-using Microsoft.EntityFrameworkCore;
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-
-builder.Services.AddDbContext<ApplicationContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
-
-builder.Services.AddTransient<IBattle, Battle>();
 
 var app = builder.Build();
 

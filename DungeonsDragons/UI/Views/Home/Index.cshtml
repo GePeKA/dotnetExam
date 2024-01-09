@@ -1,0 +1,95 @@
+﻿@using Models;
+@using System.ComponentModel
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+@model UIModel
+
+<div class="card">
+    <div class="card-header">Введите данные своего персонажа</div>
+    <form class="card-body" method="post">
+        @foreach (var property in typeof(Player).GetProperties())
+        {
+            @Html.Label(property.GetCustomAttributes(true)
+                     .Select(a => (a as DisplayNameAttribute)?.DisplayName)
+                     .FirstOrDefault(name => name is not null) ?? property.Name)
+                     
+            @Html.Editor(property.Name, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessage(property.Name, new { @class = "text text-danger my-3" })
+            <br />
+        }
+        <div class="text-center fs-2">
+            <input type="submit" class="btn btn-primary" value="Fight!" />
+        </div>
+    </form>
+</div>
+
+@if (Model.Monster is not null)
+{
+    <div class="card p-5 mt-3">
+        <div class="fs-2 fw-bold">Имя монстра: @Model.Monster.Name</div>
+        <div class="mt-1">Здоровье монстра: <span>@Model.Monster.HitPoints</span></div>
+        <div class="mt-1"> Броня монстра: @Model.Monster.ArmorClass</div>
+        <div class="mt-1"> Урон монстра: @Model.Monster.Damage</div>
+    </div>
+}
+
+
+@if (Model.Log is not null)
+{
+    var i = 1;
+
+    @foreach (var round in Model.Log.Rounds)
+    {
+        <p class="mt-2 fw-bold">Раунд @i:</p>
+
+        <p style="color:green">@Model.Player.Name</p>
+
+        @foreach (var attack in round.PlayerAttacks)
+        {
+            @if (!attack.IsHit)
+            {
+                <p>@attack.DiceRollOnAttack (+@Model.Player.AttackModifier) меньше @Model.Monster.ArmorClass, промах</p>
+            }
+            else
+            {
+                <p>@attack.DiceRollOnAttack (+@Model.Player.AttackModifier) больше @Model.Monster.ArmorClass, @attack.TotalDamage (+@Model.Player.DamageModifier)
+                    наносит @(attack.TotalDamage+Model.Player.DamageModifier) урона @Model.Monster.Name (@attack.EnemyHitPoints)
+                </p>
+            }
+        }
+        
+        @if (round.MonsterAttacks.Count() != 0)
+        {
+            <p style="color:red">@Model.Monster.Name</p>
+        }
+
+        @foreach (var attack in round.MonsterAttacks)
+        {
+            @if (!attack.IsHit)
+            {
+                <p>@attack.DiceRollOnAttack (+@Model.Monster.AttackModifier) меньше @Model.Player.ArmorClass, промах</p>
+            }
+            else
+            {
+                <p>@attack.DiceRollOnAttack (+@Model.Monster.AttackModifier) больше @Model.Player.ArmorClass, @attack.TotalDamage (+@Model.Monster.DamageModifier)
+                    наносит @(attack.TotalDamage+Model.Monster.DamageModifier) урона @Model.Player.Name (@attack.EnemyHitPoints)
+                </p>
+            }
+        }
+        i++;
+    }
+
+    <div class="mt-4 text-center fs-2 fw-bold">
+        @if (Model.Log.IsPlayerWinner)
+        {
+            <div> Вы победили </div>
+        }
+        else
+        {
+            <div> Вы проиграли, победил @Model.Monster.Name </div>
+        }
+    </div>
+}

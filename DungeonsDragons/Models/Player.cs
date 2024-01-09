@@ -31,7 +31,7 @@ namespace Models
         public string Damage { get; set; }
 
         [Required]
-        [Range(-5, 5, ErrorMessage = "Введите число от -10 до 10")]
+        [Range(-10, 10, ErrorMessage = "Введите число от -10 до 10")]
         [DisplayName("Damage modifier")]
         public int DamageModifier { get; set; }
 

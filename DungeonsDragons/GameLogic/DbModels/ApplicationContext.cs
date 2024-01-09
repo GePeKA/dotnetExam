@@ -1,9 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Models;
 
 namespace GameLogic.DbModels
 {
-    public class ApplicationContext: DbContext
+    public class ApplicationContext : DbContext
     {
         public ApplicationContext(DbContextOptions options) : base(options) { }
 
@@ -60,6 +61,17 @@ namespace GameLogic.DbModels
             };
 
             modelBuilder.Entity<Monster>().HasData(archelon, armanit, demogorgon, mindFlayer);
+        }
+
+        public async Task<Monster> GetRandomMonster()
+        {
+            var monstersCount = await Monsters.CountAsync();
+
+            var randomMonsterIndex = new Random().Next(0, monstersCount);
+
+            var randomMonster = await Monsters.ElementAtAsync(randomMonsterIndex);
+
+            return randomMonster;
         }
     }
 }
